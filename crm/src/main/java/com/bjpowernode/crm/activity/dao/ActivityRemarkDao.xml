@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bjpowernode.crm.activity.dao.ActivityRemarkDao">
+    <select id="getActivityRemark" resultType="Integer">
+        select count(*) from tbl_activity_remark where activityId in
+        <foreach collection="array" item="remark" index="index" open="(" close=")" separator=",">
+            #{remark}
+        </foreach>
+    </select>
+
+    <delete id="deleteActivityRemark" parameterType="Integer">
+        delete from tbl_activity_remark where activityId in
+        <foreach collection="array" item="remark" index="index" open="(" close=")" separator=",">
+            #{remark}
+        </foreach>
+    </delete>
+
+    <select id="detailRemark" resultType="com.bjpowernode.crm.activity.domain.TblActivityRemark">
+        select
+        id,
+        noteContent,
+        createTime,
+        createBy,
+        editTime,
+        editBy,
+        editFlag
+        from tbl_activity_remark
+        where activityId=#{activityId}
+        order by editTime desc,createTime desc
+
+    </select>
+	<delete id="deleteRemark">
+        delete from tbl_activity_remark where id=#{remarkId}
+    </delete>
+
+    <insert id="saveRemark">
+insert into tbl_activity_remark(
+    id,
+    noteContent,
+    createTime,
+    createBy,
+    editTime,
+    editBy,
+    editFlag,
+    activityId
+)
+
+values (
+    #{id},
+    #{noteContent},
+    #{createTime},
+    #{createBy},
+    #{editTime},
+    #{editBy},
+    #{editFlag},
+    #{activityId}
+)
+
+    </insert>
+
+    <update id="editRemark">
+        update tbl_activity_remark
+        set
+        noteContent = #{noteContent},
+        editTime = #{editTime},
+        editBy = #{editBy},
+        editFlag = #{editFlag}
+        where
+        id = #{id}
+
+    </update>
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

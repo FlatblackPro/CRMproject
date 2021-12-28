@@ -1,0 +1,9 @@
+add/create:跳转到新增页，或者弹出新增的模态窗口(比如：id = "addBtn")
+save:执行新增操作
+edit:跳转到更新页，或者弹出更新的模态窗口
+update:执行更新
+get:查询数据 （select/find也可以）
+delete：删除数据
+特殊操作：
+login:登录
+

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bjpowernode.crm.activity.dao.ActivityDao">
+<insert id="saveActivity" >
+insert into tbl_activity(
+  id,
+  owner,
+  name,
+  startDate,
+  endDate,
+  cost,
+  description,
+  createTime,
+  createBy
+) values(
+  #{id},
+  #{owner},
+  #{name},
+  #{startDate},
+  #{endDate},
+  #{cost},
+  #{description},
+  #{createTime},
+  #{createBy}
+  )
+</insert>
+  <!--查询市场活动，并且返回一个LIST-->
+  <select id="getActivity" resultType="com.bjpowernode.crm.activity.domain.TblActivity">
+    select
+    t.id,
+    t.name,
+    u.name as owner,
+    t.startDate,
+    t.endDate
+    from tbl_activity t join tbl_user u on
+    t.owner = u.id
+    <where>
+      <if test="name != null and name != ''">
+        /*这里的name不能乱写，因为这边接收的是map，所以这里的name必须和map中的key保持一致
+        if中的两个name和语句中的name，必须保持一致*/
+        t.name like '%' #{name} '%'
+      </if>
+      <if test="owner != null and owner != ''">
+        /*注意：这里不能用别名！*/
+        and u.name like '%' #{owner} '%'
+      </if>
+      <if test="startDate != null and startDate != ''">
+        and t.startDate &gt; #{startDate}
+      </if>
+      <if test="endDate != null and endDate !=''">
+        and t.endDate &lt; #{endDate}
+      </if>
+    </where>
+    order by t.createTime desc
+    limit #{pageCount}, #{pageSize}
+
+  </select>
+
+  <!--查询市场活动，返回total条数-->
+  <select id="getActivityCount" resultType="int">
+    select
+    count(*)
+    from tbl_activity t join tbl_user u on
+    t.owner = u.id
+    <where>
+      <if test="name!=null and name!=''">
+        /*这里的name不能乱写，因为这边接收的是map，所以这里的name必须和map中的key保持一致
+        if中的两个name和语句中的name，必须保持一致*/
+        t.name like '%' #{name} '%'
+      </if>
+      <if test="owner != null and owner != ''">
+        /*注意：这里不能用别名！*/
+        and u.name like '%' #{owner} '%'
+      </if>
+      <if test="startDate != null and startDate != ''">
+        and t.startDate &gt; #{startDate}
+      </if>
+      <if test="endDate != null and endDate !=''">
+        and t.endDate &lt; #{endDate}
+      </if>
+    </where>
+  </select>
+
+  <delete id="deleteActivity" parameterType="Integer">
+    delete from tbl_activity where id in
+    <foreach collection="array" item="activity" open="(" close=")" separator=",">
+      #{activity}
+    </foreach>
+  </delete>
+
+  <select id="editActivity" resultType="com.bjpowernode.crm.activity.domain.TblActivity">
+
+    select * from tbl_activity where id=#{id}
+  </select>
+
+  <update id="editActivityUpdate">
+    update tbl_activity
+    set
+    owner=#{owner},
+    name=#{name},
+    startDate=#{startDate},
+    endDate=#{endDate},
+    cost=#{cost},
+    description=#{description},
+    editBy=#{editBy},
+    editTime=#{editTime}
+    where id = #{id}
+  </update>
+
+  <select id="detail" resultType="com.bjpowernode.crm.activity.domain.TblActivity">
+    select
+    t.id,
+    u.name as owner,
+    t.name,
+    t.startDate,
+    t.endDate,
+    t.cost,
+    t.description,
+    t.createTime,
+    t.createBy,
+    t.editTime,
+    t.editBy
+    from tbl_activity t join tbl_user u on
+    t.owner = u.id
+    where t.id = #{id}
+  </select>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

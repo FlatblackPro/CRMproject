@@ -7,6 +7,14 @@ public class TblDicType {
   private String name;
   private String description;
 
+  public TblDicType() {
+  }
+
+  public TblDicType(String code, String name, String description) {
+    this.code = code;
+    this.name = name;
+    this.description = description;
+  }
 
   public String getCode() {
     return code;

@@ -14,8 +14,13 @@
 <head>
     <base href="<%=basePath%>">
     <title>Title</title>
+
+    <script type="text/javascript">
+
+    </script>
 </head>
 <body>
 
 </body>
 </html>
+

@@ -21,6 +21,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		if (window.top != window.self){
 			window.top.location = window.self.location;
 		}
+
+		$(document).keydown(function(event){
+			if(event.keyCode==13){
+				$("#loginBtn").click();
+			}
+		});
 		
 		//通过focus，让页面加载完毕后，光标在登录窗口中。
 		$("#loginAct").focus();

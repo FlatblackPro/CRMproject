@@ -9,6 +9,16 @@ public class TblDicValue {
   private String orderNo;
   private String typeCode;
 
+  public TblDicValue() {
+  }
+
+  public TblDicValue(String id, String value, String text, String orderNo, String typeCode) {
+    this.id = id;
+    this.value = value;
+    this.text = text;
+    this.orderNo = orderNo;
+    this.typeCode = typeCode;
+  }
 
   public String getId() {
     return id;

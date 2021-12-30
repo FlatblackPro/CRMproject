@@ -49,7 +49,6 @@ public class ActivityServiceImpl implements ActivityService {
         PaginationVO<TblActivity> VO = new PaginationVO<>();
         VO.setDataList(tblActivityList);
         VO.setTotal(total);
-        System.out.println("返回的总条数：" + total);
         return VO;
     }
 

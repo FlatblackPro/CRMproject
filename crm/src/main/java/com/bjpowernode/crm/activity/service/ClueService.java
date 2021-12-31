@@ -13,4 +13,6 @@ public interface ClueService {
 
 
     PaginationVO<TblClue> getClue(Map<String, Object> map);
+
+    TblClue getDetail(String id);
 }

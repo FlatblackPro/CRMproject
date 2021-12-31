@@ -36,7 +36,12 @@ public class ClueServiceImpl implements ClueService {
         return vo;
     }
 
-
+    @Override
+    //点击线索，进入详细信息页面：
+    public TblClue getDetail(String id) {
+        TblClue tblClue = clueDao.getDetail(id);
+        return tblClue;
+    }
 
 
 }

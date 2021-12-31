@@ -36,14 +36,24 @@ public class ClueController extends HttpServlet {
         else if ("/workbench/clue/getClue.do".equals(path)){
             getClue(request,response);
         }
-        else if ("/workbench/clue/xxx.do".equals(path)){
-
+        else if ("/workbench/clue/getDetail.do".equals(path)){
+            getDetail(request,response);
         }
         else if ("/workbench/clue/xxx.do".equals(path)){
 
         }
 
     }
+
+    //点击线索，进入详细信息页面：
+    private void getDetail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String id = request.getParameter("id");
+        ClueService clueService = (ClueService) ServiceFactory.getService(new ClueServiceImpl());
+        TblClue tblClue = clueService.getDetail(id);
+        request.setAttribute("clue", tblClue);
+        request.getRequestDispatcher("/workbench/clue/detail.jsp").forward(request,response);
+    }
+
     //刷新已更新、添加、修改的线索：
     private void getClue(HttpServletRequest request, HttpServletResponse response) {
         System.out.println("进入到线索查询控制器");

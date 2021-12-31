@@ -115,6 +115,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			})
 		})
 
+
+
 	});
 
     /*2021/12/29:
@@ -161,7 +163,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				$.each(resp.dataList,function (i,clue) {
 					html += '<tr>';
 					html += '<td><input type="checkbox" /></td>';
-					html += '<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'workbench/clue/detail.jsp\';">'+clue.fullname+'</a></td>';
+					html += '<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'workbench/clue/getDetail.do?id='+clue.id+'\';">'+clue.fullname+'</a></td>';
 					html += '<td>'+clue.company+'</td>';
 					html += '<td>'+clue.phone+'</td>';
 					html += '<td>'+clue.mphone+'</td>';
@@ -213,6 +215,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			}
 		})
 	}
+
+	/*
+	2021/12/31: 新增：点击线索，进入详细信息页
+			由于进入详细信息页，页面会跳转，因此使用传统请求即可
+
+	 */
+
 	
 </script>
 </head>
@@ -330,7 +339,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							<div class="form-group">
 								<label for="create-nextContactTime" class="col-sm-2 control-label">下次联系时间</label>
 								<div class="col-sm-10" style="width: 300px;">
-									<input type="text" class="form-control time" id="create-nextContactTime">
+									<input type="text" class="form-control time" id="create-nextContactTime" readonly="readonly">
 								</div>
 							</div>
 						</div>

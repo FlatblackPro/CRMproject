@@ -15,4 +15,6 @@ public interface ClueDao {
 
 
     int getClueTotal(Map<String, Object> map);
+
+    TblClue getDetail(String id);
 }

@@ -29,4 +29,9 @@ public interface ActivityDao {
     //点击市场活动，跳转到市场活动详细信息页面：
     TblActivity detail(String activityId);
 
+    //进入线索详细信息页后，展现关联该线索的市场活动：
+    List<TblActivity> showClueActivity(String clueId);
+
+    //在线索详细信息页，点击关联，打开模态窗口，搜索需要关联的市场活动：
+    List<TblActivity> getClueActivityRelation(Map<String, String> map);
 }

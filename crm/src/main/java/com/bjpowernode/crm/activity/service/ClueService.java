@@ -1,5 +1,6 @@
 package com.bjpowernode.crm.activity.service;
 
+import com.bjpowernode.crm.activity.domain.TblActivity;
 import com.bjpowernode.crm.activity.domain.TblClue;
 import com.bjpowernode.crm.settings.domain.User;
 import com.bjpowernode.crm.vo.PaginationVO;
@@ -15,4 +16,8 @@ public interface ClueService {
     PaginationVO<TblClue> getClue(Map<String, Object> map);
 
     TblClue getDetail(String id);
+
+    Boolean deleteClueActivityRelation(String relationId);
+
+    List<TblActivity> getClueActivityRelation(Map<String, String> map);
 }

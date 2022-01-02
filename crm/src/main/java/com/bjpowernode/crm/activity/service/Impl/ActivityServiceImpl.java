@@ -155,4 +155,11 @@ public class ActivityServiceImpl implements ActivityService {
             return false;
         }
     }
+
+    @Override
+    //进入线索详细信息页后，展现关联该线索的市场活动：
+    public List<TblActivity> showClueActivity(String clueId) {
+        List<TblActivity> tblActivityList = activityDao.showClueActivity(clueId);
+        return tblActivityList;
+    }
 }

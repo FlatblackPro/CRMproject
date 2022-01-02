@@ -29,4 +29,6 @@ public interface ActivityService {
     Boolean saveRemark(TblActivityRemark tblActivityRemark);
 
     boolean editRemark(TblActivityRemark tblActivityRemark);
+
+    List<TblActivity> showClueActivity(String clueId);
 }

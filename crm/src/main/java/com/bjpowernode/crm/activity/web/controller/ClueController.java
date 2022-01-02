@@ -1,7 +1,11 @@
 package com.bjpowernode.crm.activity.web.controller;
 
+import com.bjpowernode.crm.activity.domain.TblActivity;
 import com.bjpowernode.crm.activity.domain.TblClue;
+import com.bjpowernode.crm.activity.domain.TblClueActivityRelation;
+import com.bjpowernode.crm.activity.service.ActivityService;
 import com.bjpowernode.crm.activity.service.ClueService;
+import com.bjpowernode.crm.activity.service.Impl.ActivityServiceImpl;
 import com.bjpowernode.crm.activity.service.Impl.ClueServiceImpl;
 import com.bjpowernode.crm.settings.domain.User;
 import com.bjpowernode.crm.settings.service.Impl.UserServiceImpl;
@@ -39,10 +43,52 @@ public class ClueController extends HttpServlet {
         else if ("/workbench/clue/getDetail.do".equals(path)){
             getDetail(request,response);
         }
+        else if ("/workbench/clue/showClueActivity.do".equals(path)){
+            showClueActivity(request,response);
+        }
+        else if ("/workbench/clue/deleteClueActivityRelation.do".equals(path)){
+            deleteClueActivityRelation(request,response);
+        }
+        else if ("/workbench/clue/getClueActivityRelation.do".equals(path)){
+            getClueActivityRelation(request,response);
+        }
+        else if ("/workbench/clue/xxx.do".equals(path)){
+
+        }
         else if ("/workbench/clue/xxx.do".equals(path)){
 
         }
 
+    }
+
+    //在线索详细信息页，点击关联，打开模态窗口，搜索需要关联的市场活动：
+    private void getClueActivityRelation(HttpServletRequest request, HttpServletResponse response) {
+        String clueId = request.getParameter("clueId");
+        String activityName = request.getParameter("activityName");
+        Map<String,String> map = new HashMap<>();
+        map.put("clueId",clueId);
+        map.put("activityName",activityName);
+        ClueService clueService = (ClueService) ServiceFactory.getService(new ClueServiceImpl());
+        List<TblActivity> tblActivityList =  clueService.getClueActivityRelation(map);
+        PrintJson.printJsonObj(response,tblActivityList);
+
+    }
+
+    //在线索详细信息页，用于解除市场活动和线索的关联：
+    private void deleteClueActivityRelation(HttpServletRequest request, HttpServletResponse response) {
+        Boolean flag = true;
+        String relationId = request.getParameter("relationId");
+        ClueService clueService = (ClueService) ServiceFactory.getService(new ClueServiceImpl());
+        flag = clueService.deleteClueActivityRelation(relationId);
+        PrintJson.printJsonFlag(response,flag);
+    }
+
+    //进入线索详细信息页后，展现关联该线索的市场活动：
+    private void showClueActivity(HttpServletRequest request, HttpServletResponse response) {
+        String clueId = request.getParameter("clueId");
+        ActivityService activityService = (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+        List<TblActivity> tblActivityList = activityService.showClueActivity(clueId);
+        PrintJson.printJsonObj(response,tblActivityList);
     }
 
     //点击线索，进入详细信息页面：

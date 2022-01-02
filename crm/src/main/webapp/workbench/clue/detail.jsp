@@ -51,8 +51,134 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		$(".myHref").mouseout(function(){
 			$(this).children("span").css("color","#E6E6E6");
 		});
+		//点击线索进入线索详细页时，显示和当前线索关联的市场活动
+        showClueActivity();
+
+        /*
+        2022/1/1：新增：点击关联活动模态窗口，进行活动搜索功能：
+        addRelationBox——textbox
+         */
+        $("#addRelationBox").keydown(function (event) {
+            if (event.keyCode == 13){
+            	var activityName = $.trim($("#addRelationBox").val());
+                /*
+                data:
+                    activity名称
+                    clueId
+                 */
+				$.ajax({
+					url:"workbench/clue/getClueActivityRelation.do",
+					dataType:"json",
+					type:"get",
+					data:{
+						"clueId":"${clue.id}",
+						"activityName":activityName
+					},
+					success:function (resp) {
+						/*
+						返回市场活动list
+						<tr id="ActivityToShow">
+						<td><input type="checkbox" value="123"/></td>
+						<td>发传单</td>
+						<td>2020-10-10</td>
+						<td>2020-10-20</td>
+						<td>zhangsan</td>
+						</tr>
+						 */
+						var html = "";
+						$.each(resp,function (i,activity) {
+							html += '<tr id="'+activity.id+'">';
+							html += '<td><input type="checkbox" value="'+activity.id+'"/></td>';
+							html += '<td>'+activity.name+'</td>';
+							html += '<td>'+activity.startDate+'</td>';
+							html += '<td>'+activity.endDate+'</td>';
+							html += '<td>'+activity.owner+'</td>';
+							html += '</tr>';
+						})
+						$("#activityGot").html(html);
+					}
+				})
+				return false;
+            }
+        })
+
 	});
-	
+        /*
+        2022/1/1：新增功能：点击线索进入线索详细页时，显示和当前线索关联的市场活动
+
+        */
+    function showClueActivity() {
+        $.ajax({
+            url:"workbench/clue/showClueActivity.do",
+            dataType:"json",
+            type:"post",
+            data:{
+                "clueId":"${clue.id}"
+            },
+            success: function (resp) {
+                /*
+                <tr>
+                <td>发传单</td>
+                <td>2020-10-10</td>
+                <td>2020-10-20</td>
+                <td>zhangsan</td>
+                <td><a href="javascript:void(0);"  style="text-decoration: none;"><span class="glyphicon glyphicon-remove"></span>解除关联</a></td>
+                </tr>
+                 */
+                var html = "";
+                $.each(resp,function (i,activity) {
+                    html += '<tr>';
+                    html += '<td>'+activity.name+'</td>';
+                    html += '<td>'+activity.startDate+'</td>';
+                    html += '<td>'+activity.endDate+'</td>';
+                    html += '<td>'+activity.owner+'</td>';
+                    html += '<td><a href="javascript:void(0);"  style="text-decoration: none;" onclick="deleteRelation(\''+activity.id+'\')"><span class="glyphicon glyphicon-remove" ></span>解除关联</a></td>';
+                    html += '</tr>';
+                })
+                $("#showClueRemark").html(html);
+            }
+        })
+    }
+
+    /*
+    2022/1/1：新增：点击解除关联后，活动与线索关联解除。
+     */
+
+    function deleteRelation(relationId) {
+        var confirm = window.confirm("确认解除关联吗？");
+        if (confirm){
+            $.ajax({
+                url:"workbench/clue/deleteClueActivityRelation.do",
+                dataType:"json",
+                type:"post",
+                data:{
+                    "relationId":relationId
+                },
+                success:function (resp) {
+                    /*
+                    resp true/flase;
+					<tr id="ActivityToShow">
+					<td><input type="checkbox" value="123"/></td>
+					<td>发传单</td>
+					<td>2020-10-10</td>
+					<td>2020-10-20</td>
+					<td>zhangsan</td>
+					</tr>
+                     */
+                    if (resp.success){
+                        alert("解除关联成功");
+                        showClueActivity();
+                    } else {
+                        alert("解除关联失败");
+                    }
+                }
+            })
+        } else {
+            alert("已取消操作");
+        }
+
+    }
+
 </script>
 
 </head>
@@ -72,15 +198,15 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					<div class="btn-group" style="position: relative; top: 18%; left: 8px;">
 						<form class="form-inline" role="form">
 						  <div class="form-group has-feedback">
-						    <input type="text" class="form-control" style="width: 300px;" placeholder="请输入市场活动名称，支持模糊查询">
+						    <input type="text" class="form-control" style="width: 300px;" placeholder="请输入市场活动名称，支持模糊查询" id="addRelationBox">
 						    <span class="glyphicon glyphicon-search form-control-feedback"></span>
 						  </div>
 						</form>
 					</div>
 					<table id="activityTable" class="table table-hover" style="width: 900px; position: relative;top: 10px;">
 						<thead>
-							<tr style="color: #B3B3B3;">
-								<td><input type="checkbox"/></td>
+							<tr style="color: #B3B3B3;" >
+								<td><input type="checkbox" /></td>
 								<td>名称</td>
 								<td>开始日期</td>
 								<td>结束日期</td>
@@ -88,10 +214,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<td></td>
 							</tr>
 						</thead>
-						<tbody>
-							<tr>
+						<tbody id="activityGot">
+							<tr >
 								<td><input type="checkbox"/></td>
-								<td>发传单</td>
+								<td>发传单123</td>
 								<td>2020-10-10</td>
 								<td>2020-10-20</td>
 								<td>zhangsan</td>
@@ -107,8 +233,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					</table>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-					<button type="button" class="btn btn-primary" data-dismiss="modal">关联</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal" id="cancelRelationBtn">取消</button>
+					<button type="button" class="btn btn-primary" data-dismiss="modal" id="addRelationBtn">关联</button>
 				</div>
 			</div>
 		</div>
@@ -435,7 +561,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							<td></td>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody id="showClueRemark">
 						<tr>
 							<td>发传单</td>
 							<td>2020-10-10</td>

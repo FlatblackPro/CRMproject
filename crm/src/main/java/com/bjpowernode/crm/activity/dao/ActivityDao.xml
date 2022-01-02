@@ -127,6 +127,43 @@ insert into tbl_activity(
     t.owner = u.id
     where t.id = #{id}
   </select>
+
+  <select id="showClueActivity" resultType="com.bjpowernode.crm.activity.domain.TblActivity">
+    select
+    car.id,
+    u.name as owner,
+    a.name,
+    a.startDate,
+    a.endDate
+    from tbl_activity a
+    join tbl_user u on
+    u.id=a.owner
+    join tbl_clue_activity_relation car on
+    a.id=car.activityId
+    join tbl_clue c on
+    c.id=car.clueId
+    where c.id=#{clueId}
+
+
+  </select>
+
+  <select id="getClueActivityRelation" resultType="com.bjpowernode.crm.activity.domain.TblActivity">
+    select
+    a.id,
+    a.name,
+    a.startDate,
+    a.endDate,
+    u.name as owner
+    from tbl_activity a
+    join tbl_user u
+    on a.owner=u.id
+    where a.name like '%' #{activityName} '%'
+    and a.id not in(
+    select activityId
+    from tbl_clue_activity_relation where
+    clueId=#{clueId}
+    )
+  </select>
 	
 </mapper>
 

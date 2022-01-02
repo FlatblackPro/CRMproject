@@ -4,7 +4,9 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.bjpowernode.crm.activity.dao.ClueActivityRelationDao">
-	
+	<delete id="deleteClueActivityRelation">
+        delete from tbl_clue_activity_relation where id=#{relationId}
+    </delete>
 	
   	
 </mapper>

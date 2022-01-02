@@ -1,6 +1,9 @@
 package com.bjpowernode.crm.activity.service.Impl;
 
+import com.bjpowernode.crm.activity.dao.ActivityDao;
+import com.bjpowernode.crm.activity.dao.ClueActivityRelationDao;
 import com.bjpowernode.crm.activity.dao.ClueDao;
+import com.bjpowernode.crm.activity.domain.TblActivity;
 import com.bjpowernode.crm.activity.domain.TblClue;
 import com.bjpowernode.crm.activity.service.ClueService;
 import com.bjpowernode.crm.settings.dao.UserDao;
@@ -14,6 +17,8 @@ import java.util.Map;
 
 public class ClueServiceImpl implements ClueService {
     private ClueDao clueDao = SqlSessionUtil.getSqlSession().getMapper(ClueDao.class);
+    private ClueActivityRelationDao clueActivityRelationDao = SqlSessionUtil.getSqlSession().getMapper(ClueActivityRelationDao.class);
+    private ActivityDao activityDao = SqlSessionUtil.getSqlSession().getMapper(ActivityDao.class);
     @Override
     //添加线索功能：
     public Boolean saveClue(TblClue clue) {
@@ -41,6 +46,24 @@ public class ClueServiceImpl implements ClueService {
     public TblClue getDetail(String id) {
         TblClue tblClue = clueDao.getDetail(id);
         return tblClue;
+    }
+
+    @Override
+    //在线索详细信息页，用于解除市场活动和线索的关联：
+    public Boolean deleteClueActivityRelation(String relationId) {
+        int count = 0;
+        count = clueActivityRelationDao.deleteClueActivityRelation(relationId);
+        if (count == 1){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    //在线索详细信息页，点击关联，打开模态窗口，搜索需要关联的市场活动：
+    public List<TblActivity> getClueActivityRelation(Map<String, String> map) {
+        List<TblActivity> tblActivityList = activityDao.getClueActivityRelation(map);
+        return tblActivityList;
     }
 
 

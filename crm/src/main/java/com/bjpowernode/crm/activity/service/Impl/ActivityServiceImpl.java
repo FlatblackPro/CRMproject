@@ -162,4 +162,11 @@ public class ActivityServiceImpl implements ActivityService {
         List<TblActivity> tblActivityList = activityDao.showClueActivity(clueId);
         return tblActivityList;
     }
+
+    @Override
+    //点击转换按键，弹出转换的页面，通过活动名称搜索市场活动（仅搜索关联的市场活动）
+    public List<TblActivity> convertSearchAndShow(String clueId, String activityName) {
+        List<TblActivity> activityList = activityDao.convertSearchAndShow(clueId,activityName);
+        return activityList;
+    }
 }

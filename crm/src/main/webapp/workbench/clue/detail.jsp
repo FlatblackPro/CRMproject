@@ -27,6 +27,14 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				cancelAndSaveBtnDefault = false;
 			}
 		});
+
+		/*
+		2022/1/2:新增：当完成关联市场活动和线索之后，再次打开关联市场活动的模态窗口，之前的信息被清除。
+		*/
+		$("#openModalAddRelation").click(function () {
+			$("#addRelationForm")[0].reset()
+			$("#activityGot").html("");
+		})
 		
 		$("#cancelBtn").click(function(){
 			//显示
@@ -88,7 +96,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						var html = "";
 						$.each(resp,function (i,activity) {
 							html += '<tr id="'+activity.id+'">';
-							html += '<td><input type="checkbox" value="'+activity.id+'"/></td>';
+							html += '<td><input type="checkbox" name="xz" value="'+activity.id+'"/></td>';
 							html += '<td>'+activity.name+'</td>';
 							html += '<td>'+activity.startDate+'</td>';
 							html += '<td>'+activity.endDate+'</td>';
@@ -101,6 +109,58 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				return false;
             }
         })
+
+		/*
+		2022/1/2：新增：模态窗口中的全选与反选：
+		*/
+		$("#selectActivityRelation").click(function () {
+			$("input[name=xz]").prop("checked",this.checked);
+		})
+		//反选：
+		$("#activityGot").on("click",$("input[name=xz]"),function () {
+			$("#selectActivityRelation").prop("checked",$("input[name=xz]").length==$("input[name=xz]:checked").length);
+		})
+
+
+
+
+		/*
+		2022/1/2:新增：关联市场活动功能
+		 */
+		$("#addRelationBtn").click(function () {
+			/*
+			给到后台的数据：
+			data:
+			{[id1,id2,id3,id4]}
+			 */
+			var param = "clueId=${clue.id}&";
+			//表单选择器：所有的$("#input[name=xz]:checked")的元素，放到一个数组中。其中每一个元素就是一个DOM对象。要用JS操作。
+			var activityList = $("input[name=xz]:checked");
+			$.each(activityList,function (i,checkbox) {
+				param += "id=" + checkbox.value;
+				if (i != activityList.length -1 ){
+					param += "&";
+				}
+			})
+			$.ajax({
+				url:"workbench/clue/saveClueActivityRelation.do",
+				type:"post",
+				dataType:"json",
+				data:param,
+				success:function (resp) {
+					if (resp.success){
+						alert("关联成功");
+						$("#bundModal").modal("hide");
+						showClueActivity();
+					} else{
+						alert("关联失败")
+
+					}
+				}
+			})
+		})
+
+
 
 	});
         /*
@@ -196,7 +256,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				</div>
 				<div class="modal-body">
 					<div class="btn-group" style="position: relative; top: 18%; left: 8px;">
-						<form class="form-inline" role="form">
+						<form class="form-inline" role="form" id="addRelationForm">
 						  <div class="form-group has-feedback">
 						    <input type="text" class="form-control" style="width: 300px;" placeholder="请输入市场活动名称，支持模糊查询" id="addRelationBox">
 						    <span class="glyphicon glyphicon-search form-control-feedback"></span>
@@ -206,7 +266,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					<table id="activityTable" class="table table-hover" style="width: 900px; position: relative;top: 10px;">
 						<thead>
 							<tr style="color: #B3B3B3;" >
-								<td><input type="checkbox" /></td>
+								<td><input type="checkbox" id="selectActivityRelation"/></td>
 								<td>名称</td>
 								<td>开始日期</td>
 								<td>结束日期</td>
@@ -215,7 +275,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							</tr>
 						</thead>
 						<tbody id="activityGot">
-							<tr >
+							<%--<tr >
 								<td><input type="checkbox"/></td>
 								<td>发传单123</td>
 								<td>2020-10-10</td>
@@ -227,14 +287,14 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<td>发传单</td>
 								<td>2020-10-10</td>
 								<td>2020-10-20</td>
-								<td>zhangsan</td>
+								<td>zhangsan</td>--%>
 							</tr>
 						</tbody>
 					</table>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal" id="cancelRelationBtn">取消</button>
-					<button type="button" class="btn btn-primary" data-dismiss="modal" id="addRelationBtn">关联</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal" >取消</button>
+					<button type="button" class="btn btn-primary"  id="addRelationBtn">关联</button>
 				</div>
 			</div>
 		</div>
@@ -407,12 +467,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			<h3>${clue.fullname}${clue.appellation} <small>${clue.company}</small></h3>
 		</div>
 		<div style="position: relative; height: 50px; width: 500px;  top: -72px; left: 700px;">
-			<button type="button" class="btn btn-default" onclick="window.location.href='workbench/clue/convert.jsp';"><span class="glyphicon glyphicon-retweet"></span> 转换</button>
+			<button type="button" class="btn btn-default" onclick="window.location.href='workbench/clue/convert.do?clueId=${clue.id}';"><span class="glyphicon glyphicon-retweet"></span> 转换</button>
 			<button type="button" class="btn btn-default" data-toggle="modal" data-target="#editClueModal"><span class="glyphicon glyphicon-edit"></span> 编辑</button>
 			<button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
 		</div>
 	</div>
-	
+
 	<!-- 详细信息 -->
 	<div style="position: relative; top: -70px;">
 		<div style="position: relative; left: 40px; height: 30px;">
@@ -581,7 +641,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			</div>
 			
 			<div>
-				<a href="javascript:void(0);" data-toggle="modal" data-target="#bundModal" style="text-decoration: none;"><span class="glyphicon glyphicon-plus"></span>关联市场活动</a>
+				<a href="javascript:void(0);" data-toggle="modal" data-target="#bundModal" style="text-decoration: none;" id="openModalAddRelation"><span class="glyphicon glyphicon-plus"></span>关联市场活动</a>
 			</div>
 		</div>
 	</div>

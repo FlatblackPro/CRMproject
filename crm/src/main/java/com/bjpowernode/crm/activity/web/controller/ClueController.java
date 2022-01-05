@@ -1,5 +1,6 @@
 package com.bjpowernode.crm.activity.web.controller;
 
+import com.bjpowernode.crm.activity.dao.ClueActivityRelationDao;
 import com.bjpowernode.crm.activity.domain.TblActivity;
 import com.bjpowernode.crm.activity.domain.TblClue;
 import com.bjpowernode.crm.activity.domain.TblClueActivityRelation;
@@ -52,6 +53,27 @@ public class ClueController extends HttpServlet {
         else if ("/workbench/clue/getClueActivityRelation.do".equals(path)){
             getClueActivityRelation(request,response);
         }
+        else if ("/workbench/clue/saveClueActivityRelation.do".equals(path)){
+            saveClueActivityRelation(request,response);
+        }
+        else if ("/workbench/clue/convert.do".equals(path)){
+            convert(request,response);
+        }
+        else if ("/workbench/clue/convertSearchAndShow.do".equals(path)){
+            convertSearchAndShow(request,response);
+        }
+        else if ("/workbench/clue/clueConvert.do".equals(path)){
+            clueConvert(request,response);
+        }
+        else if ("/workbench/clue/xxx.do".equals(path)){
+
+        }
+        else if ("/workbench/clue/xxx.do".equals(path)){
+
+        }
+        else if ("/workbench/clue/xxx.do".equals(path)){
+
+        }
         else if ("/workbench/clue/xxx.do".equals(path)){
 
         }
@@ -59,6 +81,52 @@ public class ClueController extends HttpServlet {
 
         }
 
+
+    }
+
+    //核心功能：将线索转换为交易、或者客户联系人，然后删除这条线索。
+    private void clueConvert(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("进入核心功能（交易转换）控制器");
+        String clueId = request.getParameter("clueId");
+        String flag = request.getParameter("flag");
+        if ("true".equals(flag)){
+            //需要创建交易
+        }else {
+            //不需要创建交易
+        }
+    }
+
+    //点击转换按键，弹出转换的页面，通过活动名称搜索市场活动（仅搜索关联的市场活动）
+    private void convertSearchAndShow(HttpServletRequest request, HttpServletResponse response) {
+        String clueId = request.getParameter("clueId");
+        String activityName = request.getParameter("activityName");
+        ActivityService activityService = (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+        List<TblActivity> activityList = activityService.convertSearchAndShow(clueId,activityName);
+        PrintJson.printJsonObj(response,activityList);
+
+    }
+
+    //在线索详细信息页，点击转换按键，弹出转换的页面，并将相应的信息铺进去：
+    private void convert(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String clueId = request.getParameter("clueId");
+        ClueService clueService = (ClueService) ServiceFactory.getService(new ClueServiceImpl());
+        TblClue clue = clueService.convert(clueId);
+        request.setAttribute("clue",clue);
+        request.getRequestDispatcher("/workbench/clue/convert.jsp").forward(request,response);
+    }
+
+    //在线索详细信息页，点击关联，打开模态窗口，关联市场活动
+    private void saveClueActivityRelation(HttpServletRequest request, HttpServletResponse response) {
+        boolean flag = true;
+        String clueId = request.getParameter("clueId");
+        String[] ids = request.getParameterValues("id");
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("ids",ids);
+        map.put("clueId",clueId);
+        ClueService clueService = (ClueService) ServiceFactory.getService(new ClueServiceImpl());
+        flag = clueService.saveClueActivityRelation(map);
+        PrintJson.printJsonFlag(response,flag);
     }
 
     //在线索详细信息页，点击关联，打开模态窗口，搜索需要关联的市场活动：

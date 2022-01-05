@@ -31,4 +31,6 @@ public interface ActivityService {
     boolean editRemark(TblActivityRemark tblActivityRemark);
 
     List<TblActivity> showClueActivity(String clueId);
+
+    List<TblActivity> convertSearchAndShow(String clueId, String activityName);
 }

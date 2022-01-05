@@ -82,6 +82,10 @@
         <url-pattern>/workbench/clue/showClueActivity.do</url-pattern>
         <url-pattern>/workbench/clue/deleteClueActivityRelation.do</url-pattern>
         <url-pattern>/workbench/clue/getClueActivityRelation.do</url-pattern>
+        <url-pattern>/workbench/clue/saveClueActivityRelation.do</url-pattern>
+        <url-pattern>/workbench/clue/convert.do</url-pattern>
+        <url-pattern>/workbench/clue/convertSearchAndShow.do</url-pattern>
+        <url-pattern>/workbench/clue/clueConvert.do</url-pattern>
     </servlet-mapping>
 
 </web-app>

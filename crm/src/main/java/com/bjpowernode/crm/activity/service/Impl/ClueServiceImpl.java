@@ -5,10 +5,12 @@ import com.bjpowernode.crm.activity.dao.ClueActivityRelationDao;
 import com.bjpowernode.crm.activity.dao.ClueDao;
 import com.bjpowernode.crm.activity.domain.TblActivity;
 import com.bjpowernode.crm.activity.domain.TblClue;
+import com.bjpowernode.crm.activity.domain.TblClueActivityRelation;
 import com.bjpowernode.crm.activity.service.ClueService;
 import com.bjpowernode.crm.settings.dao.UserDao;
 import com.bjpowernode.crm.settings.domain.User;
 import com.bjpowernode.crm.utils.SqlSessionUtil;
+import com.bjpowernode.crm.utils.UUIDUtil;
 import com.bjpowernode.crm.vo.PaginationVO;
 
 import java.util.ArrayList;
@@ -66,5 +68,33 @@ public class ClueServiceImpl implements ClueService {
         return tblActivityList;
     }
 
+
+    @Override
+    //在线索详细信息页，点击关联，打开模态窗口，关联市场活动
+    public boolean saveClueActivityRelation(Map<String, Object> map) {
+        String clueId = (String) map.get("clueId");
+        String[] ids = (String[]) map.get("ids");
+        for (String id:
+             ids) {
+            String relationId = UUIDUtil.getUUID();
+            TblClueActivityRelation relation = new TblClueActivityRelation();
+            relation.setActivityId(id);
+            relation.setClueId(clueId);
+            relation.setId(relationId);
+            int count = clueActivityRelationDao.saveClueActivityRelation(relation);
+            if (count != 1){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    //在线索详细信息页，点击转换按键，弹出转换的页面，并将相应的信息铺进去：
+    public TblClue convert(String clueId) {
+
+        TblClue clue = clueDao.getDetail(clueId);
+        return clue;
+    }
 
 }

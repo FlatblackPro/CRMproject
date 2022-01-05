@@ -20,4 +20,8 @@ public interface ClueService {
     Boolean deleteClueActivityRelation(String relationId);
 
     List<TblActivity> getClueActivityRelation(Map<String, String> map);
+
+    boolean saveClueActivityRelation(Map<String, Object> map);
+
+    TblClue convert(String clueId);
 }

@@ -164,7 +164,25 @@ insert into tbl_activity(
     clueId=#{clueId}
     )
   </select>
-	
+
+  <select id="convertSearchAndShow" resultType="com.bjpowernode.crm.activity.domain.TblActivity">
+    select
+    a.id,
+    a.name,
+    a.startDate,
+    a.endDate,
+    u.name as owner
+    from tbl_activity a
+    join tbl_user u
+    on a.owner=u.id
+    where a.name like '%' #{activityName} '%'
+    and a.id in (
+    select activityId from tbl_clue_activity_relation
+    where clueId=#{clueId}
+    )
+  </select>
+
+
 </mapper>
 
 

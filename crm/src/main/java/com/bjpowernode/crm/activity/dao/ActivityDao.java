@@ -3,6 +3,7 @@ package com.bjpowernode.crm.activity.dao;
 import com.bjpowernode.crm.activity.domain.TblActivity;
 import com.bjpowernode.crm.activity.domain.TblActivityRemark;
 import com.bjpowernode.crm.settings.domain.User;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -34,4 +35,8 @@ public interface ActivityDao {
 
     //在线索详细信息页，点击关联，打开模态窗口，搜索需要关联的市场活动：
     List<TblActivity> getClueActivityRelation(Map<String, String> map);
+
+    //点击转换按键，弹出转换的页面，通过活动名称搜索市场活动（仅搜索关联的市场活动）
+    List<TblActivity> convertSearchAndShow(@Param("clueId") String clueId,
+                                           @Param("activityName") String activityName);
 }

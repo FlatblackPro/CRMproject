@@ -46,6 +46,20 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		});
 		//-------------------------------------
 
+		/*
+		2022/1/7：当线索记录转化成功后，弹窗提示用户已转化成功/失败
+		*/
+		$(document).ready(function () {
+			var flag = "${requestScope.success}";
+			if (flag == "1"){
+				alert("线索转化成功")
+			} else if (flag == "0"){
+				alert("线索转化失败")
+			}
+		})
+
+
+
         /*2021/12/29:
         新增：线索添加功能
         */

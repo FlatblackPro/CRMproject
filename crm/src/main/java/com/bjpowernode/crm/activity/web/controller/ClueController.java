@@ -4,6 +4,7 @@ import com.bjpowernode.crm.activity.dao.ClueActivityRelationDao;
 import com.bjpowernode.crm.activity.domain.TblActivity;
 import com.bjpowernode.crm.activity.domain.TblClue;
 import com.bjpowernode.crm.activity.domain.TblClueActivityRelation;
+import com.bjpowernode.crm.activity.domain.TblTran;
 import com.bjpowernode.crm.activity.service.ActivityService;
 import com.bjpowernode.crm.activity.service.ClueService;
 import com.bjpowernode.crm.activity.service.Impl.ActivityServiceImpl;
@@ -85,15 +86,44 @@ public class ClueController extends HttpServlet {
     }
 
     //核心功能：将线索转换为交易、或者客户联系人，然后删除这条线索。
-    private void clueConvert(HttpServletRequest request, HttpServletResponse response) {
+    private void clueConvert(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("进入核心功能（交易转换）控制器");
+        //线索ID
         String clueId = request.getParameter("clueId");
-        String flag = request.getParameter("flag");
-        if ("true".equals(flag)){
+        System.out.println(clueId);
+        //转换人
+        String createBy = ((User) request.getSession().getAttribute("user")).getName();
+        //是否创建交易
+        String tranFlag = request.getParameter("tranFlag");
+        TblTran tran = null;
+        boolean flag;
+        if ("true".equals(tranFlag)){
             //需要创建交易
-        }else {
-            //不需要创建交易
+            tran = new TblTran();
+            String activityId = request.getParameter("activityId");
+            String money = request.getParameter("money");
+            String name = request.getParameter("name");
+            String expectedDate = request.getParameter("expectedDate");
+            String stage = request.getParameter("stage");
+            String createTime = DateTimeUtil.getSysTime();
+            //创建交易对象，将基础信息填入：
+            tran.setId(UUIDUtil.getUUID());
+            tran.setActivityId(activityId);
+            tran.setStage(stage);
+            tran.setMoney(money);
+            tran.setName(name);
+            tran.setExpectedDate(expectedDate);
+            tran.setCreateTime(createTime);
+            tran.setCreateBy(createBy);
         }
+        ClueService clueService = (ClueService) ServiceFactory.getService(new ClueServiceImpl());
+        flag = clueService.clueConvert(clueId, tran, createBy);
+        if (flag){
+            request.setAttribute("success",1);
+        }else {
+            request.setAttribute("success",0);
+        }
+        request.getRequestDispatcher("/workbench/clue/index.jsp").forward(request,response);
     }
 
     //点击转换按键，弹出转换的页面，通过活动名称搜索市场活动（仅搜索关联的市场活动）

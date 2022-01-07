@@ -74,7 +74,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								var activityId = $("input[name=xz]:checked").val();
 								var activityName = $("#"+activityId).html();
 								$("#activityId").val(activityId);
-								$("#openSearchActivityModal").html(activityName);
+								$("#activity").val(activityName);
 								$("#searchActivityModal").modal("hide");
 							})
 
@@ -106,7 +106,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			if ($("#isCreateTransaction").prop("checked")){
 				$("#clueConvert").submit();
 			} else{
-				window.location.href = "/workbench/clue/clueConvert.do?clueId='+${clue.id}+'";
+				window.location.href = "workbench/clue/clueConvert.do?clueId=${clue.id}";
 			}
 		})
 
@@ -174,14 +174,18 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	</div>
 	<div id="create-transaction2" style="position: relative; left: 40px; top: 20px; width: 80%; background-color: #F7F7F7; display: none;" >
 	
-		<form id="clueConvert" action="/workbench/clue/clueConvert.do" method="post">
+		<form id="clueConvert" action="workbench/clue/clueConvert.do" method="post">
 			<%--
 			挂载clueid，activityid等信息，通过表单提交的方式给到后台
 			给表单加一个flag，用来标记是否为客户创建交易
 			--%>
-			<input type="hidden" name="flag" value="true">
+			<%--是否选择了创建交易--%>
+			<input type="hidden" name="tranFlag" value="true">
+			<%--关联市场活动的ID--%>
 			<input type="hidden" id="activityId" name="activityId">
+			<%--线索ID--%>
 			<input type="hidden" id="clueId" name="clueId" value="${clue.id}">
+			<%--交易相关的信息--%>
 		  <div class="form-group" style="width: 400px; position: relative; left: 20px;">
 		    <label for="amountOfMoney">金额</label>
 		    <input type="text" class="form-control" id="amountOfMoney" name="money">

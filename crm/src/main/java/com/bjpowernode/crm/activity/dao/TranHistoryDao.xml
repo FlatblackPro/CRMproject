@@ -4,7 +4,27 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.bjpowernode.crm.activity.dao.TranHistoryDao">
-	
+	<insert id="saveTranHistory">
+        insert into tbl_tran_history(
+        id,
+        stage,
+        money,
+        expectedDate,
+        createTime,
+        createBy,
+        tranId
+        )values (
+        #{id},
+        #{stage},
+        #{money},
+        #{expectedDate},
+        #{createTime},
+        #{createBy},
+        #{tranId}
+        )
+
+
+    </insert>
   	
 </mapper>
 

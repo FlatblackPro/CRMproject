@@ -33,4 +33,6 @@ public interface ActivityService {
     List<TblActivity> showClueActivity(String clueId);
 
     List<TblActivity> convertSearchAndShow(String clueId, String activityName);
+
+    List<TblActivity> getActivityByContact(String activityName, String contactId);
 }

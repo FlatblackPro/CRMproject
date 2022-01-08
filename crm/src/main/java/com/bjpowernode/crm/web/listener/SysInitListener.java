@@ -8,9 +8,7 @@ import com.bjpowernode.crm.utils.ServiceFactory;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /*
 通过监听器，在servlet工作的生命周期中，将数据字典放到application域中。
@@ -23,6 +21,7 @@ public class SysInitListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         System.out.println("进入全局作用域监听器");
+        System.out.println("将数据字典存入application");
         ServletContext application = sce.getServletContext();
         /*
         监听器用法类似于控制器，在监听器中创建代理类去处理业务:
@@ -39,6 +38,19 @@ public class SysInitListener implements ServletContextListener {
         for (String code:
              codeSet) {
             application.setAttribute(code,map.get(code));
+        }
+
+
+        System.out.println("将stage和possibility的关系存入application");
+        ResourceBundle bundle = ResourceBundle.getBundle("stage2possibility");
+        Enumeration stages = bundle.getKeys();
+        while (stages.hasMoreElements()){
+            /*
+            {'stage1':'p1','stage2':'p2'...}
+             */
+            String stage = (String) stages.nextElement();
+            String possibility = bundle.getString(stage);
+            application.setAttribute(stage,possibility);
         }
     }
 

@@ -39,4 +39,8 @@ public interface ActivityDao {
     //点击转换按键，弹出转换的页面，通过活动名称搜索市场活动（仅搜索关联的市场活动）
     List<TblActivity> convertSearchAndShow(@Param("clueId") String clueId,
                                            @Param("activityName") String activityName);
+
+    //在添加交易页面中，打开查找市场活动源的模态窗口，搜索相关的市场活动：
+    List<TblActivity> getActivityByContact(@Param("activityName") String activityName,
+                                           @Param("contactsId") String contactId);
 }

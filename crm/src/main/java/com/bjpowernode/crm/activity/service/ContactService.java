@@ -1,12 +1,9 @@
-package com.bjpowernode.crm.activity.dao;
+package com.bjpowernode.crm.activity.service;
 
 import com.bjpowernode.crm.activity.domain.TblContacts;
 
 import java.util.List;
 
-public interface ContactsDao {
-
-    int saveContacts(TblContacts contacts);
-
+public interface ContactService {
     List<TblContacts> getContactPerson(String fullname);
 }

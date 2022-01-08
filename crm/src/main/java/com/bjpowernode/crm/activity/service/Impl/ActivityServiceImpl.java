@@ -169,4 +169,11 @@ public class ActivityServiceImpl implements ActivityService {
         List<TblActivity> activityList = activityDao.convertSearchAndShow(clueId,activityName);
         return activityList;
     }
+
+    @Override
+    //在添加交易页面中，打开查找市场活动源的模态窗口，搜索相关的市场活动：
+    public List<TblActivity> getActivityByContact(String activityName, String contactId) {
+        List<TblActivity> activityList = activityDao.getActivityByContact(activityName, contactId);
+        return activityList;
+    }
 }

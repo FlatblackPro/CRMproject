@@ -32,6 +32,9 @@ public class SysInitListener implements ServletContextListener {
             value就是code对应的dicvalue表中的value；
          */
         Map<String, List<TblDicValue>> map = dicService.getDicForListener();
+
+        //2022/1/12：为阶段切换功能所准备的map：
+        Map<String, String> relationMap = new HashMap<>();
         //将map中的key，放到set中，然后遍历set，拿到set对应的value
         //最后以"code":"valueList"的形式，将数据字典放到全局作用域中：
         Set<String> codeSet = map.keySet();
@@ -39,6 +42,7 @@ public class SysInitListener implements ServletContextListener {
              codeSet) {
             application.setAttribute(code,map.get(code));
         }
+
 
 
         System.out.println("将stage和possibility的关系存入application");
@@ -51,7 +55,19 @@ public class SysInitListener implements ServletContextListener {
             String stage = (String) stages.nextElement();
             String possibility = bundle.getString(stage);
             application.setAttribute(stage,possibility);
+            //2022/1/12：为阶段切换功能所准备的map：
+            relationMap.put(stage,possibility);
+
         }
+        //2022/1/12：为阶段切换功能所准备的map：
+        application.setAttribute("relationMap",relationMap);
+/*          测试代码：
+            Set<String> set = relationMap.keySet();
+            for (String key:
+             set) {
+            System.out.println("relationMap的key：--->"+key);
+            System.out.println("relationMap的value：--->"+relationMap.get(key));
+        }*/
     }
 
     @Override

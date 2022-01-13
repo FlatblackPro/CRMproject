@@ -222,8 +222,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						$("#hidden-source").val(source);
 						//翻页后触发；
 						getClue(data.currentPage , data.rowsPerPage);
-						//翻页后，全选标记应该变为无：
-						$("#selectedClue").prop("checked",false);
 					}
 				});
 			}

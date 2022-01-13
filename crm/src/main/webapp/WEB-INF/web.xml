@@ -99,6 +99,12 @@
         <url-pattern>/workbench/transaction/getContactPerson.do</url-pattern>
         <url-pattern>/workbench/transaction/getActivityByContact.do</url-pattern>
         <url-pattern>/workbench/transaction/getCustomerName.do</url-pattern>
+        <url-pattern>/workbench/transaction/saveTransaction.do</url-pattern>
+        <url-pattern>/workbench/transaction/searchTransaction.do</url-pattern>
+        <url-pattern>/workbench/transaction/detail.do</url-pattern>
+        <url-pattern>/workbench/transaction/getHistory.do</url-pattern>
+        <url-pattern>/workbench/transaction/changeStage.do</url-pattern>
+        <url-pattern>/workbench/transaction/changeStage1.do</url-pattern>
     </servlet-mapping>
 
 </web-app>

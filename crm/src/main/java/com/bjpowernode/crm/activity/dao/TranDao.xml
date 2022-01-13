@@ -41,7 +41,117 @@
         #{nextContactTime}
         )
     </insert>
-  	
+
+        <select id="getTran" resultType="com.bjpowernode.crm.activity.domain.TblTran">
+            select
+                tran.id,
+                tran.owner,
+                tran.money,
+                tran.name,
+                tran.expectedDate,
+                tran.customerId,
+                tran.stage,
+                tran.type,
+                tran.source,
+                tran.activityId,
+                tran.contactsId,
+                tran.createBy,
+                tran.createTime,
+                tran.editBy,
+                tran.editTime,
+                tran.description,
+                tran.contactSummary,
+                tran.nextContactTime
+                from tbl_tran tran
+                <where>
+                    <if test="owner!='' and owner!=null ">
+                    tran.owner like '%' #{owner} '%'
+                    </if>
+                    <if test="name!='' and name!=null ">
+                        and tran.name like '%' #{name} '%'
+                    </if>
+                    <if test="stage!='' and stage!=null ">
+                        and tran.stage like '%' #{stage} '%'
+                    </if>
+                    <if test="type!='' and type!=null ">
+                        and tran.type like '%' #{type} '%'
+                    </if>
+                    <if test="source!='' and source!=null ">
+                        and tran.source like '%' #{source} '%'
+                    </if>
+                    <if test="customerList!=null">
+                        and tran.customerId in
+                        <foreach collection="customerList" item="cusId" open="(" close=")" separator=",">
+                            #{cusId}
+                        </foreach>
+                    </if>
+                </where>
+                order by tran.createTime desc
+                limit #{pageCount}, #{pageSize}
+
+        </select>
+
+    <select id="getTranCount" resultType="Integer">
+        select
+        count(*) from tbl_tran tran
+        <where>
+            <if test="owner!='' and owner!=null ">
+                tran.owner like '%' #{owner} '%'
+            </if>
+            <if test="name!='' and name!=null ">
+                tran.name like '%' #{name} '%'
+            </if>
+            <if test="stage!='' and stage!=null ">
+                tran.stage like '%' #{stage} '%'
+            </if>
+            <if test="type!='' and type!=null ">
+                tran.type like '%' #{type} '%'
+            </if>
+            <if test="source!='' and source!=null ">
+                tran.source like '%' #{source} '%'
+            </if>
+            <if test="customerId!='' and customerId!=null ">
+                tran.customerId in #{customerId}
+            </if>
+            <if test="contactId!='' and contactId!=null ">
+                tran.contactId in #{contactId}
+            </if>
+        </where>
+    </select>
+
+    <select id="getTranById" resultType="com.bjpowernode.crm.activity.domain.TblTran">
+        select
+                tran.id,
+                u.name as owner,
+                tran.money,
+                tran.name,
+                tran.expectedDate,
+                c.name as customerId,
+                tran.stage,
+                tran.type,
+                tran.source,
+                a.name as activityId,
+                con.fullname as contactsId,
+                tran.createBy,
+                tran.createTime,
+                tran.editBy,
+                tran.editTime,
+                tran.description,
+                tran.contactSummary,
+                tran.nextContactTime
+                from tbl_tran tran
+                left join tbl_user u on tran.owner = u.id
+                left join tbl_activity a on tran.activityId = a.id
+                left join tbl_customer c on tran.customerId = c.id
+                left join tbl_contacts con on tran.contactsId = con.id
+                where tran.id=#{tranId}
+    </select>
+    
+    <update id="updateTranById">
+        update tbl_tran
+        set stage=#{stage},editTime=#{editTime},editBy=#{editBy}
+        where id=#{id};
+    </update>
 </mapper>
 
 

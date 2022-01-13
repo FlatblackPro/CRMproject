@@ -47,7 +47,18 @@
         <select id="getContactPerson" resultType="com.bjpowernode.crm.activity.domain.TblContacts">
                 select * from tbl_contacts where fullname like '%' #{fullname} '%'
         </select>
-  	
+
+    <select id="getContactIdNByName" resultType="String">
+        select id from tbl_contacts
+        <where>
+            <if test="contactName!='' and contactName!=null">
+                fullname like '%' #{contactName} '%'
+            </if>
+        </where>
+    </select>
+    <select id="getContactNameById" resultType="String">
+        select fullname from tbl_contacts where id=#{contactsId};
+    </select>
 </mapper>
 
 

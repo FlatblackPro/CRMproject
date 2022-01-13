@@ -39,6 +39,23 @@
     <select id="getCustomerName" resultType="String">
         select name from tbl_customer where name like '%' #{name} '%'
     </select>
+
+    <select id="getCustomerIdByName" resultType="String">
+        select id from tbl_customer where name=#{customerName}
+    </select>
+
+    <select id="getCustomerIdListByName" resultType="String">
+        select id from tbl_customer
+        <where>
+            <if test="customerName!='' and customerName!=null">
+                name like '%' #{customerName} '%'
+            </if>
+        </where>
+    </select>
+
+    <select id="getCustomerNameById" resultType="String">
+        select name from tbl_customer where id=#{customerId}
+    </select>
 </mapper>
 
 

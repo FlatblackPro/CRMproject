@@ -14,9 +14,7 @@ import com.bjpowernode.crm.utils.UUIDUtil;
 import com.bjpowernode.crm.vo.PaginationVO;
 
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class TranServiceImpl implements TranService {
     private CustomerDao customerDao = SqlSessionUtil.getSqlSession().getMapper(CustomerDao.class);
@@ -145,6 +143,27 @@ public class TranServiceImpl implements TranService {
         return true;
     }
 
+    @Override
+    //显示图表
+    public Map<String, Object> getChart() {
+        Map<String, Object> map = new HashMap<>();
+        List<String> legendList = new ArrayList<>();
+        int total = tranDao.getTotal();
+        // [{name:xx, value:xx},{},{}]
+        List<Map<String, Object>> dataList = tranDao.getChartDatas();
+        for (Map<String, Object> m:
+             dataList) {
+            legendList.add((String) m.get("name"));
+        }
+        map.put("total",total);
+        map.put("dataList",dataList);
+        map.put("legendList",legendList);
+        for (String s:
+             legendList) {
+            System.out.println(s);
+        }
+        return map;
+    }
 
 
 }

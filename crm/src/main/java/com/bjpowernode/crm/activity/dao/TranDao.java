@@ -17,4 +17,8 @@ public interface TranDao {
     TblTran getTranById(String tranId);
 
     int updateTranById(TblTran tran);
+
+    int getTotal();
+
+    List<Map<String, Object>> getChartDatas();
 }

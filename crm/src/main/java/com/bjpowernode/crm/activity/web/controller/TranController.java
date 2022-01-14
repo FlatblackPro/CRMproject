@@ -60,8 +60,8 @@ public class TranController extends HttpServlet {
             changeStage(request,response);
         }
 
-        else if ("/workbench/transaction/xxx.do".equals(path)){
-
+        else if ("/workbench/transaction/getChart.do".equals(path)){
+            getChart(request,response);
         }
         else if ("/workbench/transaction/xxx.do".equals(path)){
 
@@ -76,6 +76,13 @@ public class TranController extends HttpServlet {
         ServletContext application = request.getServletContext();
 
     }
+    //显示图表
+    private void getChart(HttpServletRequest request, HttpServletResponse response) {
+        TranService tranService = (TranService) ServiceFactory.getService(new TranServiceImpl());
+        Map<String, Object> map = tranService.getChart();
+        PrintJson.printJsonObj(response,map);
+    }
+
     //在详细信息页面，点击阶段图标，相应的阶段能够被更改
     private void changeStage(HttpServletRequest request, HttpServletResponse response) {
         String tranId = request.getParameter("tranId");

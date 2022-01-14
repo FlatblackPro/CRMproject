@@ -152,6 +152,16 @@
         set stage=#{stage},editTime=#{editTime},editBy=#{editBy}
         where id=#{id};
     </update>
+
+    <select id="getTotal" resultType="int">
+        select count(*) from tbl_tran;
+    </select>
+    <select id="getChartDatas" resultType="map">
+        select
+        count(*) as value,stage as name
+        from tbl_tran
+        group by stage
+    </select>
 </mapper>
 
 

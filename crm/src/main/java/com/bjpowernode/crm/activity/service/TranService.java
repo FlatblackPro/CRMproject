@@ -19,4 +19,6 @@ public interface TranService {
 
 
     boolean changeStage(TblTran tran);
+
+    Map<String, Object> getChart();
 }

@@ -244,7 +244,7 @@ System.out.println(basePath);
 		var flag = "<%=flag%>";
 
 		//当前阶段是最后两个
-		if (index >= flag){
+		if (index > flag){
 			//开始遍历铺上图标：
 			//确定前7个图标：
 			for (var i = 0; i < flag; i++) {
